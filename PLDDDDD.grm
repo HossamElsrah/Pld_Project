@@ -1,0 +1,84 @@
+"Start Symbol" = <program>
+
+!----------Terminal----
+Id = ['_'] | {letter}{alphanumeric}*
+Digit = ('+'|'-')?{digit}('.'{digit})?
+
+!--------Rules----
+<program> ::= 'begin' <statements> 'end'  
+
+<statements> ::= <concept>
+               | <concept> <statements>
+
+<concept> ::= <assign>
+            | <if_stmt>
+            | <loop_stmt>
+            | <while_stmt>
+
+<assign> ::= <id> '=' <expr>
+
+<id> ::= 'Id'
+
+<expr> ::= <term> '+' <expr>
+         | <term> '-' <expr>
+         | <term>
+
+<term> ::= <factor> '*' <term>
+         | <factor> '/' <term>
+         | <factor>
+
+<factor> ::= <factor> '**' <exp>
+           | <exp>
+
+<exp> ::= '(' <expr> ')'
+        | <id>
+        | <digit>
+
+<digit> ::= 'Digit'
+
+!--------If------
+<if_stmt> ::= 'if' '(' <cond> ')' 'then' 'begin' <statements> 'end'
+            | 'if' '(' <cond> ')' 'then' 'begin' <statements> 'end' <statements>
+
+<cond> ::= <expr> <op> <expr>
+
+<op> ::= '<' | '>' | '==' | '!='
+
+!--------While------
+<while_stmt> ::= 'while' '(' <cond> ')' 'begin' <statements> 'end'
+
+!--------Loop------
+<loop_stmt> ::= 'loop' '(' <data> <assign> ';' <cond> ';' <step> ')' 'begin' <statements> 'end'
+
+<data> ::= 'int' | 'double' | 'float' | 'string'
+
+<step> ::= '--' <id>
+         | <id> '--'
+         | <id> '++'
+         | '++' <id>
+         | <assign>
+
+!--------Function Definition------
+<variable_decl> ::= <data_type> <id>
+
+<data_type> ::= 'int' | 'float' | 'double' | 'string'
+
+<function_def> ::= <return_type> <function_name> '(' <parameter_list> ')' 'begin' <variable_decl_list> <statements> 'end'
+
+<return_type> ::= 'int' | 'float' | 'double' | 'string' | 'void'
+
+<function_name> ::= 'Id'
+
+<parameter_list> ::= <parameter>
+                   | <parameter> ',' <parameter_list>
+
+<parameter> ::= <data_type> <id>
+
+<variable_decl_list> ::= <variable_decl>
+                       | <variable_decl> <variable_decl_list>
+
+!--------Function Call------
+<function_call> ::= <id> '(' <argument_list> ')'
+
+<argument_list> ::= <expr>
+                  | <expr> ',' <argument_list>
